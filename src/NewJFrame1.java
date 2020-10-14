@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 /**
  *
  * @author jinang_shah
@@ -6,6 +7,7 @@ public class NewJFrame1 extends javax.swing.JFrame {
 
     
     String s,algo;
+    int head;
     /**
      * Creates new form NewJFrame1
      */
@@ -59,6 +61,48 @@ public class NewJFrame1 extends javax.swing.JFrame {
         return a;
     }
     
+    public int[] scan(int a[]){
+        
+        int [] done=new int[20];
+        int [] scan=new int[20];
+        int i,l,column=0,temp,j=0;
+        int nearest= substract(a[0],a[1]);
+        scan[0]=a[0];
+        temp=a[0];
+        
+        for(i=0;i<a.length;i++)
+            done[i]=0;
+        
+   
+	for(i=1;i<a.length;i++){
+
+		l=1;     
+		while(l<10 && done[l]!=0){
+			l++;
+		}
+		     			 
+		nearest=substract(a[l],temp);	      
+				    
+   		for(j=1;j<a.length;j++){
+   	   		if(done[j]!=1 && (substract(a[j],temp)<=nearest) && (substract(a[j],temp)!=0)){     	   	 	   	  		
+   	   	      		nearest=substract(a[j],temp); 
+   	   	      		column=j;					  	  					
+			}
+   		}
+   		done[column]=1; 
+   		scan[i]= a[column];
+   		temp=scan[i];  		 		 
+        }
+        
+        for(i=0;i<a.length;i++)
+            a[i]=scan[i];
+        
+        return a;
+    }
+    
+    
+    
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -75,7 +119,8 @@ public class NewJFrame1 extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jComboBox1 = new javax.swing.JComboBox<>();
-        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jTextField2 = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("DISK SCHEDULING");
@@ -90,7 +135,7 @@ public class NewJFrame1 extends javax.swing.JFrame {
             }
         });
         getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 350, -1, -1));
-        getContentPane().add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(263, 203, 204, 24));
+        getContentPane().add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 250, 204, 24));
 
         jLabel1.setFont(new java.awt.Font("Imprint MT Shadow", 0, 36)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
@@ -100,12 +145,12 @@ public class NewJFrame1 extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Request Queue :");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(121, 201, -1, 24));
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 250, -1, 24));
 
         jLabel3.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("Algorithm :");
-        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(162, 247, -1, 18));
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 290, -1, 18));
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "FCFS", "SSTF", "SCAN", "C SCAN" }));
         jComboBox1.addActionListener(new java.awt.event.ActionListener() {
@@ -113,11 +158,14 @@ public class NewJFrame1 extends javax.swing.JFrame {
                 jComboBox1ActionPerformed(evt);
             }
         });
-        getContentPane().add(jComboBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(263, 245, -1, -1));
+        getContentPane().add(jComboBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 290, -1, -1));
 
-        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Background 2.png"))); // NOI18N
-        jLabel4.setText("jLabel4");
-        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(-10, 0, 730, 450));
+        jLabel5.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        jLabel5.setText("R/W Head Position :");
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 210, -1, -1));
+
+        jTextField2.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        getContentPane().add(jTextField2, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 210, 60, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -125,14 +173,22 @@ public class NewJFrame1 extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         s=jTextField1.getText();
+        head=Integer.parseInt(jTextField2.getText());
         String[] strArray = s.split(",");
-        int [] a = new int[strArray.length];
-        int [] b = new int[strArray.length];
+        int [] a = new int[strArray.length+1];
+        int [] b = new int[strArray.length+1];
+        int [] temp = new int[strArray.length+1];
 
+        ArrayList<Integer> list = new ArrayList<Integer>(strArray.length+1);
+        list.add(head);
         for(int i=0;i<strArray.length;i++){
-            a[i]=Integer.parseInt(strArray[i]);
+            list.add(Integer.parseInt(strArray[i]));
         }
         
+        for(int i=0;i<list.size();i++){
+            a[i]=list.get(i);
+        }
+
         b=a;
         
         if(algo=="FCFS"){
@@ -147,15 +203,14 @@ public class NewJFrame1 extends javax.swing.JFrame {
             
         }
         
+        
         else{
             
         }
+             
         
-        
-        
-        
-        new NewJFrame2(a,b).setVisible(true);
-        this.setVisible(false);
+       new NewJFrame2(a,b).setVisible(true);
+       this.setVisible(false);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
@@ -206,7 +261,8 @@ public class NewJFrame1 extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField jTextField2;
     // End of variables declaration//GEN-END:variables
 }
