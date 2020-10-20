@@ -93,9 +93,10 @@ public class NewJFrame2 extends javax.swing.JFrame {
      for(int i=0;i<temp1;i++)
         { 
            g.setColor(Color.WHITE); 
-           g.setFont(new Font("TimesRoman", Font.BOLD, 15));           
-           g.drawString(Integer.toString((a[i]-700)/3),a[i]-2 , 210);   //190
-         
+           g.setFont(new Font("TimesRoman", Font.BOLD, 15));
+           if((((a[i]-700)/3)!=0) && (((a[i]-700)/3)!=199) ) {         
+              g.drawString(Integer.toString((a[i]-700)/3),a[i]-2 , 210);   //190
+           }
            g.setColor(Color.BLACK);
            g.drawRect(a[i],220,1,(temp1-1)*50);   //190
            
