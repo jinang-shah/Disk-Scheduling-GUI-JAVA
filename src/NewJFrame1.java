@@ -1,4 +1,7 @@
+import static java.nio.file.Files.size;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Vector;
 /**
  *
  * @author jinang_shah
@@ -61,46 +64,93 @@ public class NewJFrame1 extends javax.swing.JFrame {
         return a;
     }
     
-    public int[] scan(int a[]){
-        
-        int [] done=new int[20];
-        int [] scan=new int[20];
-        int i,l,column=0,temp,j=0;
-        int nearest= substract(a[0],a[1]);
-        scan[0]=a[0];
-        temp=a[0];
-        
-        for(i=0;i<a.length;i++)
-            done[i]=0;
-        
-   
-	for(i=1;i<a.length;i++){
-
-		l=1;     
-		while(l<10 && done[l]!=0){
-			l++;
-		}
-		     			 
-		nearest=substract(a[l],temp);	      
-				    
-   		for(j=1;j<a.length;j++){
-   	   		if(done[j]!=1 && (substract(a[j],temp)<=nearest) && (substract(a[j],temp)!=0)){     	   	 	   	  		
-   	   	      		nearest=substract(a[j],temp); 
-   	   	      		column=j;					  	  					
-			}
-   		}
-   		done[column]=1; 
-   		scan[i]= a[column];
-   		temp=scan[i];  		 		 
+static int[] scan(int arr[], int head, String direction)
+{
+    int size=arr.length;
+    int seek_count = 0;
+    int distance, cur_track;
+    Vector<Integer> left = new Vector<Integer>(),
+                    right = new Vector<Integer>();
+    Vector<Integer> seek_sequence = new Vector<Integer>();
+    Vector<Integer> list = new Vector<Integer>();
+    int [] a = new int[size+2];
+    list.add(head);
+    // appending end values
+    // which has to be visited
+    // before reversing the direction
+    if (direction == "left")
+        left.add(0);
+    else if (direction == "right")
+        right.add(199);
+ 
+    for (int i = 0; i < size; i++) 
+    {
+        if (arr[i] < head)
+            left.add(arr[i]);
+        if (arr[i] > head)
+            right.add(arr[i]);
+    }
+ 
+    // sorting left and right vectors
+    Collections.sort(left);
+    Collections.sort(right);
+ 
+    // run the while loop two times.
+    // one by one scanning right
+    // and left of the head
+    int run = 2;
+    while (run-- >0)
+    {
+        if (direction == "left") 
+        {
+            for (int i = left.size() - 1; i >= 0; i--) 
+            {
+                cur_track = left.get(i);
+ 
+                // appending current track to seek sequence
+                seek_sequence.add(cur_track);
+                // calculate absolute distance
+                distance = Math.abs(cur_track - head);
+                // increase the total count
+                seek_count += distance;
+                // accessed track is now the new head
+                head = cur_track;
+            }
+            direction = "right";
         }
+        else if (direction == "right") 
+        {
+            for (int i = 0; i < right.size(); i++) 
+            {
+                cur_track = right.get(i);                
+                // appending current track to seek sequence
+                seek_sequence.add(cur_track);
+                // calculate absolute distance
+                distance = Math.abs(cur_track - head);
+                // increase the total count
+                seek_count += distance; 
+                // accessed track is now new head
+                head = cur_track;
+            }
+            direction = "left";
+        }
+    }
+ 
+    
+    for (int i = 0; i < seek_sequence.size(); i++)
+    {
+        list.add(seek_sequence.get(i));
         
-        for(i=0;i<a.length;i++)
-            a[i]=scan[i];
-        
-        return a;
     }
     
+    for (int i = 0; i < list.size(); i++)
+    {
+        a[i]=list.get(i);
+        System.out.println(a[i]);
+    }
     
+    return a;
+}
     
     
 
@@ -161,11 +211,12 @@ public class NewJFrame1 extends javax.swing.JFrame {
         getContentPane().add(jComboBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 290, -1, -1));
 
         jLabel5.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setText("R/W Head Position :");
         getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 210, -1, -1));
 
         jTextField2.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
-        getContentPane().add(jTextField2, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 210, 60, -1));
+        getContentPane().add(jTextField2, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 207, 60, 20));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -175,32 +226,66 @@ public class NewJFrame1 extends javax.swing.JFrame {
         s=jTextField1.getText();
         head=Integer.parseInt(jTextField2.getText());
         String[] strArray = s.split(",");
-        int [] a = new int[strArray.length+1];
-        int [] b = new int[strArray.length+1];
-        int [] temp = new int[strArray.length+1];
-
-        ArrayList<Integer> list = new ArrayList<Integer>(strArray.length+1);
-        list.add(head);
-        for(int i=0;i<strArray.length;i++){
-            list.add(Integer.parseInt(strArray[i]));
-        }
         
-        for(int i=0;i<list.size();i++){
-            a[i]=list.get(i);
-        }
-
-        b=a;
         
         if(algo=="FCFS"){
+            int [] a = new int[strArray.length+1];
+            int [] b = new int[strArray.length+1];
+
+            ArrayList<Integer> list = new ArrayList<Integer>(strArray.length+1);     //150,190,60,30,10
+            list.add(head);
+            for(int i=0;i<strArray.length;i++){
+               list.add(Integer.parseInt(strArray[i]));
+            }
+        
+            for(int i=0;i<list.size();i++){
+                a[i]=list.get(i);
+            }
+
+            b=a;
             a=a;
+            new NewJFrame2(a,b).setVisible(true);
+            this.setVisible(false);
         }
         
         else if(algo=="SSTF"){
+            int [] a = new int[strArray.length+1];
+            int [] b = new int[strArray.length+1];
+
+            ArrayList<Integer> list = new ArrayList<Integer>(strArray.length+1);
+            list.add(head);
+            for(int i=0;i<strArray.length;i++){
+               list.add(Integer.parseInt(strArray[i]));
+            }
+        
+            for(int i=0;i<list.size();i++){
+                a[i]=list.get(i);
+            }
+
+            b=a;
             a=sstf(a);
+            new NewJFrame2(a,b).setVisible(true);
+            this.setVisible(false);
         }
         
         else if(algo=="SCAN"){
+            int [] a = new int[strArray.length];
+            int [] c = new int[strArray.length+2];
+            int [] b = new int[strArray.length+2];
+
+            for(int i=0;i<strArray.length;i++){
+               a[i]=Integer.parseInt(strArray[i]);
+            }
             
+       /*     for(int i=0;i<list.size();i++){
+                a[i]=list.get(i);
+            }*/
+
+
+            b=a;
+            c=scan(a,head,"left");
+            new NewJFrame2(c,c).setVisible(true);
+            this.setVisible(false);
         }
         
         
@@ -209,8 +294,7 @@ public class NewJFrame1 extends javax.swing.JFrame {
         }
              
         
-       new NewJFrame2(a,b).setVisible(true);
-       this.setVisible(false);
+       
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
