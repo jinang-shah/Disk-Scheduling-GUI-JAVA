@@ -30,7 +30,7 @@ public class NewJFrame2 extends javax.swing.JFrame {
         
     }
     
-     public void paint(Graphics g)
+        public void paint(Graphics g)
    {
      Color myNewBlue = new Color (0, 59, 94);  //creates your new color
      Color myNewwhite = new Color (245, 245, 245);  //creates your new color
@@ -153,7 +153,7 @@ public class NewJFrame2 extends javax.swing.JFrame {
        g.setFont(new Font("TimesRoman", Font.BOLD, 15));        
        g.drawString(" = "+Integer.toString(sum)+"  Cylinders",40 , 520);
      
-     } 
+     }  
     
 
     /**
