@@ -239,6 +239,178 @@ static int[] cscan(int arr[], int head)
     
     return a; 
 } 
+
+static int[] look(int arr[], int head, String direction)
+{
+    int size=arr.length;
+    int seek_count = 0;
+    int distance, cur_track;
+    Vector<Integer> left = new Vector<Integer>(),
+                    right = new Vector<Integer>();
+    Vector<Integer> seek_sequence = new Vector<Integer>();
+    Vector<Integer> list = new Vector<Integer>();
+    int [] a = new int[size+1];
+    list.add(head);
+    for (int i = 0; i < size; i++) { 
+        if (arr[i] < head) 
+            left.add(arr[i]); 
+        if (arr[i] > head) 
+            right.add(arr[i]); 
+    } 
+  
+    // sorting left and right vectors 
+    // for servicing tracks in the 
+    // correct sequence. 
+    Collections.sort(left);
+    Collections.sort(right);
+  
+    // run the while loop two times. 
+    // one by one scanning right 
+    // and left side of the head 
+    int run = 2; 
+    while (run>0) { 
+        if (direction == "left") { 
+            for (int i = left.size() - 1; i >= 0; i--) { 
+                cur_track = left.get(i); 
+  
+                // appending current track to seek sequence 
+                seek_sequence.add(cur_track); 
+  
+                // calculate absolute distance 
+                distance = Math.abs(cur_track - head); 
+  
+                // increase the total count 
+                seek_count += distance; 
+  
+                // accessed track is now the new head 
+                head = cur_track; 
+            } 
+            // reversing the direction 
+            direction = "right"; 
+        } 
+        else if (direction == "right") { 
+            for (int i = 0; i < right.size(); i++) { 
+                cur_track = right.get(i); 
+                // appending current track to seek sequence 
+                seek_sequence.add(cur_track); 
+  
+                // calculate absolute distance 
+                distance = Math.abs(cur_track - head); 
+  
+                // increase the total count 
+                seek_count += distance; 
+  
+                // accessed track is now new head 
+                head = cur_track; 
+            } 
+            // reversing the direction 
+            direction = "left"; 
+        } 
+        
+       run--;
+    } 
+ 
+    
+    for (int i = 0; i < seek_sequence.size(); i++)
+    {
+        list.add(seek_sequence.get(i));
+        
+    }
+    
+    for (int i = 0; i < list.size(); i++)
+    {
+        a[i]=list.get(i);
+    }
+    
+    return a;
+}
+
+static int[] clook(int arr[], int head) 
+{ 
+    int size=arr.length;
+    int seek_count = 0; 
+    int distance, cur_track; 
+    Vector<Integer> left = new Vector<Integer>(),
+                    right = new Vector<Integer>();
+    Vector<Integer> seek_sequence = new Vector<Integer>();
+    Vector<Integer> list = new Vector<Integer>();
+    int [] a = new int[size+1];
+    list.add(head); 
+  
+    // Tracks on the left of the 
+    // head will be serviced when 
+    // once the head comes back 
+    // to the beggining (left end) 
+    for (int i = 0; i < size; i++) { 
+        if (arr[i] < head) 
+            left.add(arr[i]); 
+        if (arr[i] > head) 
+            right.add(arr[i]); 
+    } 
+  
+    // Sorting left and right vectors 
+    Collections.sort(left);
+    Collections.sort(right);
+  
+    // First service the requests 
+    // on the right side of the 
+    // head 
+    for (int i = 0; i < right.size(); i++) { 
+        cur_track = right.get(i); 
+  
+        // Appending current track to seek sequence 
+        seek_sequence.add(cur_track); 
+  
+        // Calculate absolute distance 
+        distance = Math.abs(cur_track - head); 
+  
+        // Increase the total count 
+        seek_count += distance; 
+  
+        // Accessed track is now new head 
+        head = cur_track; 
+    } 
+  
+    // Once reached the right end 
+    // jump to the last track that 
+    // is needed to be serviced in 
+    // left direction 
+    seek_count += Math.abs(head - left.get(0)); 
+    head = left.get(0); 
+  
+    // Now service the requests again 
+    // which are left 
+    for (int i = 0; i < left.size(); i++) { 
+        cur_track = left.get(i); 
+  
+        // Appending current track to seek sequence 
+        seek_sequence.add(cur_track); 
+  
+        // Calculate absolute distance 
+        distance = Math.abs(cur_track - head); 
+  
+        // Increase the total count 
+        seek_count += distance; 
+  
+        // Accessed track is now the new head 
+        head = cur_track; 
+    } 
+    
+    for (int i = 0; i < seek_sequence.size(); i++)
+    {
+        list.add(seek_sequence.get(i));
+        
+    }
+    
+    for (int i = 0; i < list.size(); i++)
+    {
+        a[i]=list.get(i);
+    }
+    
+    return a;
+  
+    
+} 
     
     
 
@@ -290,7 +462,7 @@ static int[] cscan(int arr[], int head)
         jLabel3.setText("Algorithm :");
         getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 290, -1, 18));
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "FCFS", "SSTF", "SCAN", "C SCAN" }));
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "FCFS", "SSTF", "SCAN", "C SCAN", "LOOK", "C LOOK" }));
         jComboBox1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboBox1ActionPerformed(evt);
@@ -377,6 +549,32 @@ static int[] cscan(int arr[], int head)
             }
 
             c=cscan(a,head);
+            new NewJFrame2(c,c).setVisible(true);
+            this.setVisible(false);
+        }
+        
+         else if(algo=="LOOK"){
+            int [] a = new int[strArray.length];
+            int [] c = new int[strArray.length+1];
+
+            for(int i=0;i<strArray.length;i++){
+               a[i]=Integer.parseInt(strArray[i]);
+            }
+
+            c=look(a,head,"left");
+            new NewJFrame2(c,c).setVisible(true);
+            this.setVisible(false);
+        }
+        
+        else if(algo=="C LOOK"){
+            int [] a = new int[strArray.length];
+            int [] c = new int[strArray.length+1];
+
+            for(int i=0;i<strArray.length;i++){
+               a[i]=Integer.parseInt(strArray[i]);
+            }
+
+            c=clook(a,head);
             new NewJFrame2(c,c).setVisible(true);
             this.setVisible(false);
         }
