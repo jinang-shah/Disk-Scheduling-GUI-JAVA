@@ -25,6 +25,25 @@ public class NewJFrame1 extends javax.swing.JFrame {
 	    return(b-a);    
     }
     
+    static int[] fcfs(int arr[], int head) 
+    {
+        int size=arr.length;
+        Vector<Integer> list = new Vector<Integer>();
+        int [] a = new int[size+1];
+        list.add(head);
+        
+        for (int i = 0; i < size; i++){
+           list.add(arr[i]);
+        }
+    
+        for (int i = 0; i < list.size(); i++){
+           a[i]=list.get(i);
+           System.out.println(a[i]);
+        }
+        
+        return a;
+    }
+    
     public int[] sstf(int a[]){
         
         int [] done=new int[20];
@@ -75,9 +94,7 @@ static int[] scan(int arr[], int head, String direction)
     Vector<Integer> list = new Vector<Integer>();
     int [] a = new int[size+2];
     list.add(head);
-    // appending end values
-    // which has to be visited
-    // before reversing the direction
+
     if (direction == "left")
         left.add(0);
     else if (direction == "right")
@@ -90,14 +107,10 @@ static int[] scan(int arr[], int head, String direction)
         if (arr[i] > head)
             right.add(arr[i]);
     }
- 
-    // sorting left and right vectors
+    
     Collections.sort(left);
     Collections.sort(right);
- 
-    // run the while loop two times.
-    // one by one scanning right
-    // and left of the head
+
     int run = 2;
     while (run-- >0)
     {
@@ -106,14 +119,7 @@ static int[] scan(int arr[], int head, String direction)
             for (int i = left.size() - 1; i >= 0; i--) 
             {
                 cur_track = left.get(i);
- 
-                // appending current track to seek sequence
                 seek_sequence.add(cur_track);
-                // calculate absolute distance
-                distance = Math.abs(cur_track - head);
-                // increase the total count
-                seek_count += distance;
-                // accessed track is now the new head
                 head = cur_track;
             }
             direction = "right";
@@ -122,14 +128,8 @@ static int[] scan(int arr[], int head, String direction)
         {
             for (int i = 0; i < right.size(); i++) 
             {
-                cur_track = right.get(i);                
-                // appending current track to seek sequence
+                cur_track = right.get(i);
                 seek_sequence.add(cur_track);
-                // calculate absolute distance
-                distance = Math.abs(cur_track - head);
-                // increase the total count
-                seek_count += distance; 
-                // accessed track is now new head
                 head = cur_track;
             }
             direction = "left";
@@ -146,7 +146,6 @@ static int[] scan(int arr[], int head, String direction)
     for (int i = 0; i < list.size(); i++)
     {
         a[i]=list.get(i);
-        System.out.println(a[i]);
     }
     
     return a;
@@ -164,64 +163,30 @@ static int[] cscan(int arr[], int head)
     int [] a = new int[size+3];
     list.add(head);
     
-    // appending end values 
-    // which has to be visited 
-    // before reversing the direction 
     left.add(0); 
     right.add(199); 
   
-    // tracks on the left of the 
-    // head will be serviced when 
-    // once the head comes back 
-    // to the beggining (left end). 
     for (int i = 0; i < size; i++) { 
         if (arr[i] < head) 
             left.add(arr[i]); 
         if (arr[i] > head) 
             right.add(arr[i]); 
     } 
-  
-    // sorting left and right vectors 
+ 
     Collections.sort(left);
     Collections.sort(right); 
-  
-    // first service the requests 
-    // on the right side of the 
-    // head. 
+ 
     for (int i = 0; i < right.size(); i++) { 
-        cur_track = right.get(i); 
-        // appending current track to seek sequence 
-        seek_sequence.add(cur_track); 
-  
-        // calculate absolute distance 
-        distance = Math.abs(cur_track - head); 
-  
-        // increase the total count 
-        seek_count += distance; 
-  
-        // accessed track is now new head 
+        cur_track = right.get(i);
+        seek_sequence.add(cur_track);
         head = cur_track; 
     } 
-  
-    // once reached the right end 
-    // jump to the beggining. 
+
     head = 0; 
-  
-    // Now service the requests again 
-    // which are left. 
+ 
     for (int i = 0; i < left.size(); i++) { 
-        cur_track = left.get(i); 
-  
-        // appending current track to seek sequence 
+        cur_track = left.get(i);  
         seek_sequence.add(cur_track); 
-  
-        // calculate absolute distance 
-        distance = Math.abs(cur_track - head); 
-  
-        // increase the total count 
-        seek_count += distance; 
-  
-        // accessed track is now the new head 
         head = cur_track; 
     } 
  
@@ -234,7 +199,6 @@ static int[] cscan(int arr[], int head)
     for (int i = 0; i < list.size(); i++)
     {
         a[i]=list.get(i);
-        System.out.println(a[i]);
     }
     
     return a; 
@@ -257,53 +221,27 @@ static int[] look(int arr[], int head, String direction)
         if (arr[i] > head) 
             right.add(arr[i]); 
     } 
-  
-    // sorting left and right vectors 
-    // for servicing tracks in the 
-    // correct sequence. 
+
     Collections.sort(left);
     Collections.sort(right);
-  
-    // run the while loop two times. 
-    // one by one scanning right 
-    // and left side of the head 
+
     int run = 2; 
     while (run>0) { 
         if (direction == "left") { 
             for (int i = left.size() - 1; i >= 0; i--) { 
                 cur_track = left.get(i); 
-  
-                // appending current track to seek sequence 
                 seek_sequence.add(cur_track); 
-  
-                // calculate absolute distance 
-                distance = Math.abs(cur_track - head); 
-  
-                // increase the total count 
-                seek_count += distance; 
-  
-                // accessed track is now the new head 
                 head = cur_track; 
             } 
-            // reversing the direction 
             direction = "right"; 
         } 
         else if (direction == "right") { 
             for (int i = 0; i < right.size(); i++) { 
                 cur_track = right.get(i); 
-                // appending current track to seek sequence 
                 seek_sequence.add(cur_track); 
-  
-                // calculate absolute distance 
-                distance = Math.abs(cur_track - head); 
-  
-                // increase the total count 
-                seek_count += distance; 
-  
-                // accessed track is now new head 
                 head = cur_track; 
             } 
-            // reversing the direction 
+
             direction = "left"; 
         } 
         
@@ -311,14 +249,11 @@ static int[] look(int arr[], int head, String direction)
     } 
  
     
-    for (int i = 0; i < seek_sequence.size(); i++)
-    {
-        list.add(seek_sequence.get(i));
-        
+    for (int i = 0; i < seek_sequence.size(); i++){
+        list.add(seek_sequence.get(i));       
     }
     
-    for (int i = 0; i < list.size(); i++)
-    {
+    for (int i = 0; i < list.size(); i++){
         a[i]=list.get(i);
     }
     
@@ -336,63 +271,29 @@ static int[] clook(int arr[], int head)
     Vector<Integer> list = new Vector<Integer>();
     int [] a = new int[size+1];
     list.add(head); 
-  
-    // Tracks on the left of the 
-    // head will be serviced when 
-    // once the head comes back 
-    // to the beggining (left end) 
+
     for (int i = 0; i < size; i++) { 
         if (arr[i] < head) 
             left.add(arr[i]); 
         if (arr[i] > head) 
             right.add(arr[i]); 
     } 
-  
-    // Sorting left and right vectors 
+
     Collections.sort(left);
     Collections.sort(right);
-  
-    // First service the requests 
-    // on the right side of the 
-    // head 
+
     for (int i = 0; i < right.size(); i++) { 
+        
         cur_track = right.get(i); 
-  
-        // Appending current track to seek sequence 
         seek_sequence.add(cur_track); 
-  
-        // Calculate absolute distance 
-        distance = Math.abs(cur_track - head); 
-  
-        // Increase the total count 
-        seek_count += distance; 
-  
-        // Accessed track is now new head 
         head = cur_track; 
     } 
-  
-    // Once reached the right end 
-    // jump to the last track that 
-    // is needed to be serviced in 
-    // left direction 
-    seek_count += Math.abs(head - left.get(0)); 
+
     head = left.get(0); 
   
-    // Now service the requests again 
-    // which are left 
     for (int i = 0; i < left.size(); i++) { 
         cur_track = left.get(i); 
-  
-        // Appending current track to seek sequence 
         seek_sequence.add(cur_track); 
-  
-        // Calculate absolute distance 
-        distance = Math.abs(cur_track - head); 
-  
-        // Increase the total count 
-        seek_count += distance; 
-  
-        // Accessed track is now the new head 
         head = cur_track; 
     } 
     
@@ -430,11 +331,13 @@ static int[] clook(int arr[], int head)
         jLabel3 = new javax.swing.JLabel();
         jComboBox1 = new javax.swing.JComboBox<>();
         jLabel5 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
+        jTextField3 = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("DISK SCHEDULING");
         setBackground(new java.awt.Color(255, 255, 255));
+        setUndecorated(true);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jButton1.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
@@ -445,7 +348,7 @@ static int[] clook(int arr[], int head)
             }
         });
         getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 350, -1, -1));
-        getContentPane().add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 250, 204, 24));
+        getContentPane().add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 210, 70, 24));
 
         jLabel1.setFont(new java.awt.Font("Imprint MT Shadow", 0, 36)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
@@ -474,35 +377,33 @@ static int[] clook(int arr[], int head)
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setText("R/W Head Position :");
         getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 210, -1, -1));
-        getContentPane().add(jTextField2, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 210, 60, 30));
+        getContentPane().add(jTextField3, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 250, 204, 24));
+
+        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Background 2.png"))); // NOI18N
+        jLabel4.setText("jLabel4");
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(-170, 0, 900, 450));
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        s=jTextField1.getText();
-        head=Integer.parseInt(jTextField2.getText());
+        s=jTextField3.getText();
+        head=Integer.parseInt(jTextField1.getText());
         String[] strArray = s.split(",");
         
         
         if(algo=="FCFS"){
-            int [] a = new int[strArray.length+1];
-            int [] b = new int[strArray.length+1];
+            int [] a = new int[strArray.length];
+            int [] c = new int[strArray.length+1];
 
-            ArrayList<Integer> list = new ArrayList<Integer>(strArray.length+1);     //150,190,60,30,10
-            list.add(head);
             for(int i=0;i<strArray.length;i++){
-               list.add(Integer.parseInt(strArray[i]));
-            }
-        
-            for(int i=0;i<list.size();i++){
-                a[i]=list.get(i);
+               a[i]=Integer.parseInt(strArray[i]);
             }
 
-            b=a;
-            a=a;
-            new NewJFrame2(a,b).setVisible(true);
+            c=fcfs(a,head);
+            new NewJFrame2(c,c).setVisible(true);
             this.setVisible(false);
         }
         
@@ -631,8 +532,9 @@ static int[] clook(int arr[], int head)
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
+    private javax.swing.JTextField jTextField3;
     // End of variables declaration//GEN-END:variables
 }
