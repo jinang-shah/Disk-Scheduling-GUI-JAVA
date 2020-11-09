@@ -86,8 +86,7 @@ public class NewJFrame1 extends javax.swing.JFrame {
 static int[] scan(int arr[], int head, String direction)
 {
     int size=arr.length;
-    int seek_count = 0;
-    int distance, cur_track;
+    int cur_track;
     Vector<Integer> left = new Vector<Integer>(),
                     right = new Vector<Integer>();
     Vector<Integer> seek_sequence = new Vector<Integer>();
@@ -154,8 +153,7 @@ static int[] scan(int arr[], int head, String direction)
 static int[] cscan(int arr[], int head) 
 { 
     int size=arr.length;
-    int seek_count = 0; 
-    int distance, cur_track; 
+    int cur_track; 
     Vector<Integer> left = new Vector<Integer>(),
                     right = new Vector<Integer>(); 
     Vector<Integer> seek_sequence = new Vector<Integer>(); 
@@ -207,8 +205,7 @@ static int[] cscan(int arr[], int head)
 static int[] look(int arr[], int head, String direction)
 {
     int size=arr.length;
-    int seek_count = 0;
-    int distance, cur_track;
+    int cur_track;
     Vector<Integer> left = new Vector<Integer>(),
                     right = new Vector<Integer>();
     Vector<Integer> seek_sequence = new Vector<Integer>();
@@ -263,8 +260,7 @@ static int[] look(int arr[], int head, String direction)
 static int[] clook(int arr[], int head) 
 { 
     int size=arr.length;
-    int seek_count = 0; 
-    int distance, cur_track; 
+    int cur_track; 
     Vector<Integer> left = new Vector<Integer>(),
                     right = new Vector<Integer>();
     Vector<Integer> seek_sequence = new Vector<Integer>();
@@ -337,7 +333,6 @@ static int[] clook(int arr[], int head)
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("DISK SCHEDULING");
         setBackground(new java.awt.Color(255, 255, 255));
-        setUndecorated(true);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jButton1.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
@@ -404,7 +399,7 @@ static int[] clook(int arr[], int head)
 
             c=fcfs(a,head);
             new NewJFrame2(c,c).setVisible(true);
-            this.setVisible(false);
+            
         }
         
         else if(algo=="SSTF"){
@@ -424,7 +419,7 @@ static int[] clook(int arr[], int head)
             b=a;
             a=sstf(a);
             new NewJFrame2(a,b).setVisible(true);
-            this.setVisible(false);
+            
         }
         
         else if(algo=="SCAN"){
@@ -437,7 +432,7 @@ static int[] clook(int arr[], int head)
 
             c=scan(a,head,"left");
             new NewJFrame2(c,c).setVisible(true);
-            this.setVisible(false);
+            
         }
         
         
@@ -451,7 +446,7 @@ static int[] clook(int arr[], int head)
 
             c=cscan(a,head);
             new NewJFrame2(c,c).setVisible(true);
-            this.setVisible(false);
+            
         }
         
          else if(algo=="LOOK"){
@@ -464,7 +459,7 @@ static int[] clook(int arr[], int head)
 
             c=look(a,head,"left");
             new NewJFrame2(c,c).setVisible(true);
-            this.setVisible(false);
+            
         }
         
         else if(algo=="C LOOK"){
@@ -477,7 +472,7 @@ static int[] clook(int arr[], int head)
 
             c=clook(a,head);
             new NewJFrame2(c,c).setVisible(true);
-            this.setVisible(false);
+            
         }
              
         
